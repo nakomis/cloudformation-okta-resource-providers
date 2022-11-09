@@ -4,7 +4,10 @@ import {OktaClient} from "../../Okta-Common/src/okta-client";
 import {AxiosError, AxiosResponse} from "axios";
 
 import {version} from '../package.json';
-
+import {
+    InvalidRequest,
+    NotUpdatable
+} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
 interface CallbackContext extends Record<string, any> {}
 
 type User = {
@@ -46,11 +49,7 @@ class Resource extends AbstractOktaResource<ResourceModel, ResourceModel, Resour
     }
 
     async list(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel[]> {
-        try {
-            return [await this.get(model, typeConfiguration)];
-        } catch (e) {
-            return [];
-        }
+        throw new InvalidRequest("Resources cannot be listed");
     }
 
     async create(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
@@ -61,8 +60,7 @@ class Resource extends AbstractOktaResource<ResourceModel, ResourceModel, Resour
     }
 
     async update(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
-        // Nothing is updatable
-        return model;
+        throw new NotUpdatable();
     }
 
     async delete(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<void> {

@@ -53,13 +53,7 @@
         "read": {
             "permissions": []
         },
-        "update": {
-            "permissions": []
-        },
         "delete": {
-            "permissions": []
-        },
-        "list": {
             "permissions": []
         }
     }
