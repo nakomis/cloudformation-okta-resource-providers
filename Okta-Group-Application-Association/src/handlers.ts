@@ -7,18 +7,37 @@ import {
     InvalidRequest,
     NotUpdatable
 } from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
+import {LoggerProxy} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
 
 interface CallbackContext extends Record<string, any> {}
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
 
 class Resource extends AbstractOktaResource<ResourceModel, ResourceModel, ResourceModel, ResourceModel, TypeConfigurationModel> {
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
 
-    async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
-        const response = await new OktaClient(typeConfiguration.oktaAccess.url, typeConfiguration.oktaAccess.apiKey, this.userAgent).doRequest<ResourceModel>(
-            'get',
-            `/api/v1/apps/${model.applicationId}/groups/${model.groupId}`);
-        return new ResourceModel(response.data);
+
+    async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel, mhlog: LoggerProxy): Promise<ResourceModel> {
+        mhlog.log("***** Get Called");
+        await delay(10000);
+        mhlog.log("***** Wait Finished");
+        this.loggerProxy.log(model);
+        mhlog.log("***** Model");
+        try {
+            const response = await new OktaClient(typeConfiguration.oktaAccess.url, typeConfiguration.oktaAccess.apiKey, this.userAgent).doRequest<ResourceModel>(
+                'get',
+                `/api/v1/apps/${model.applicationId}/groups/${model.groupId}`);
+
+            return new ResourceModel(response.data);
+        } catch (e) {
+            mhlog.log("***** Caught Exception");
+            mhlog.log(e)
+            throw e;
+        }
+        throw new Error("Shouldn't get here!!")
     }
 
     async list(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel[]> {
