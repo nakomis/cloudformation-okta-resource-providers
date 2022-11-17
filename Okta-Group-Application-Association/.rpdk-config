@@ -17,5 +17,16 @@
         "target_schemas": [],
         "useDocker": false,
         "protocolVersion": "2.0.0"
-    }
+    },
+    "contractSettings":{
+            "typeConfiguration": {
+                "configuration": {
+                    "OktaAccess": {
+                            "Url": "https://trial-9768171.okta.com",
+                            "ApiKey": "00Orz8sI1AK8ceMvd_lxRnEYycs7OTTOfsKCTHAYBh"
+                        }
+                },
+                "configurationAlias": "default"
+            }
+        }
 }
