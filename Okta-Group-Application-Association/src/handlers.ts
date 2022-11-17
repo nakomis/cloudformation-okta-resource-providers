@@ -11,10 +11,6 @@ import {LoggerProxy} from "@amazon-web-services-cloudformation/cloudformation-cl
 
 interface CallbackContext extends Record<string, any> {}
 
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-}
-
 class Resource extends AbstractOktaResource<ResourceModel, ResourceModel, ResourceModel, ResourceModel, TypeConfigurationModel> {
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
@@ -22,7 +18,6 @@ class Resource extends AbstractOktaResource<ResourceModel, ResourceModel, Resour
 
     async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel, mhlog: LoggerProxy): Promise<ResourceModel> {
         mhlog.log("***** Get Called");
-        await delay(10000);
         mhlog.log("***** Wait Finished");
         this.loggerProxy.log(model);
         mhlog.log("***** Model");
